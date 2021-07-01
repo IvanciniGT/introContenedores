@@ -1,0 +1,14 @@
+version: "3.0"
+
+services:
+    nginx:
+        container_name:     mi-nginx
+        image:              nginx:latest
+        volumes:
+            - /home/ubuntu/environment:/datos
+        ports:
+            - 8888:80
+        environment:
+            - VAR=valor 
+
+# Controlable bajo un sistema de control de VERSION

@@ -1,0 +1,20 @@
+---
+Nodos escalares: # valores sueltos
+    - 3
+    - true
+    - Hola
+    - 2021-05-03
+---
+Nodo de agrupacion:
+    listas:  # Coleccion de nodos
+        - item 1
+        - item 2
+        - item 3
+    mapas: # Coleccion de nodos. Cada nodo tiene un identificador
+        clave: 
+               - item 1
+               - item 2
+               - item 3
+        clave2: true
+---
+3
