@@ -1,0 +1,151 @@
+
+# Wordpress-Container-Pod-PodTemplate <<<<< Deployment.... n1 de replicas: PRODUCCION
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+    name: wordpress
+
+spec:
+    replicas: 2
+    
+    selector:
+        matchLabels:
+            app: wordpress
+    
+    template:
+        metadata:
+            labels:
+                app: wordpress
+        spec:
+            containers:
+                - name: wordpress
+                  image: wordpress:latest
+                  ports:
+                    - containerPort: 80
+                  env:
+                      - name: WORDPRESS_DB_HOST
+                        value: db
+                      - name: WORDPRESS_DB_USER
+                        value: exampleuser
+                      - name: WORDPRESS_DB_PASSWORD
+                        value: examplepass
+                      - name: WORDPRESS_DB_NAME
+                        valueFrom:
+                            configMapKeyRef:
+                                name: datos-bbdd-wordpress
+                                key: NOMBRE_BBDD
+                  volumeMount:
+                    - name: datos-persistens-wordpress
+                      mountPath: /var/www/html
+            volumes:
+              - name: datos-persistens-wordpress
+                persistentVolumeClaim: 
+                    claimName: peticion-volume-wordpress
+
+---
+# Servicio Wordpress
+---
+# Secret
+---
+# Configmap
+kind: ConfigMap
+apiVersion: v1
+
+metadata:
+    name: datos-bbdd-wordpress
+
+data:
+    NOMBRE_BBDD: prueba
+    
+---
+# Peticion de Volumen
+kind: PersistentVolumeClaim
+apiVersion: v1
+
+metadata:
+    name: peticion-volume-wordpress
+
+spec:
+    storageClassName: rapidito-redundante
+    resources:
+        requests:
+            capacity: 10Gi
+    accessModes:
+        - ReadWriteOnce
+        
+
+---
+# Ingress
+---
+# HorizontalPodAutoscaler
+---
+
+
+  wordpress:  # Servicio
+    container_name: wordpress
+    image: wordpress:latest
+    restart: always
+    ports:
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=exampleuser
+      - WORDPRESS_DB_PASSWORD=examplepass
+      - WORDPRESS_DB_NAME=exampledb
+    volumes:
+      - /home/ubuntu/environment/datos/wordpress:/var/www/html
+
+
+
+---
+#MariaDB--- Container ---- Pod ----- PodTemplate    <<<<<    StatefulSet
+#    PeticionDeVolumen tantas como replicas   --- Plantilla de peticion de volumen
+---
+#ConfigMap
+---
+#Secrets
+---
+#Service
+---
+#HPA
+---
+
+  db:       # Servicio BBDD    <--- Nombre DNS
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - /home/ubuntu/environment/datos/mysql:/var/lib/mysql
+
+Cliente     Cliente 2
+  VVV
+Navegador
+  VVV
+IngressController <<<< Ingress
+  VVV
+Servicio Wordpress  (BALANCEADOR)
+                Voy a configurar que los 3 contenedores usen el mismo VOLUMEN     DEPLOYMENT
+        *  Contenedor 1 Wordpress     PDF >>>> VOLUMEN      
+           Contenedor 2 Wordpress                           
+        ** Contenedor 3 Wordpress     VOLUMEN <<<< PDF
+        ** Contenedor 4 Wordpress     VOLUMEN <<<< PDF
+
+ElasticSearch
+Kafka
+OracleRAC
+MariaDB CLUSTER       Modo Replicación
+            Voy a configurar que los 3 contenedores usen DISTINTOS VOLUEMENES      STATEFULSET
+    * Contenedor 1 MariaDB  >>>> Metadatos del PDF >>>>> Archivo FileSystem 
+    * Contenedor 2 MariaDB
+      Contenedor 3 MariaDB   >>>> Metadatos de otro PDF
+    
+HELM >>>>   Chart (plantilla.. programa)
+
+
+Que pasa cuando quiero montar mis propias apps... no las comerciales
+Montar mi propio Chart de Helm
