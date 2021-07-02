@@ -25,14 +25,14 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  mariadb-root-password: "Rmd1RHU3eVh5NA=="
-  mariadb-password: "eGhRY1dIeThHWQ=="
+  mariadb-root-password: "cGFzc3dvcmQ="
+  mariadb-password: "cGFzc3dvcmQ="
 ---
 # Source: wordpress/templates/secrets.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: RELEASE-NAME-wordpress
+  name: miwp-wordpress
   namespace: "default"
   labels:
     app.kubernetes.io/name: wordpress
@@ -41,7 +41,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  wordpress-password: "MDN3bm84UGxZSw=="
+  wordpress-password: "cGFzc3dvcmQ="
 ---
 # Source: wordpress/charts/mariadb/templates/primary/configmap.yaml
 apiVersion: v1
@@ -139,17 +139,18 @@ metadata:
     app.kubernetes.io/instance: RELEASE-NAME
     app.kubernetes.io/managed-by: Helm
 spec:
-  type: LoadBalancer
-  externalTrafficPolicy: "Cluster"
+  type: ClusterIP
   ports:
     - name: http
       port: 80
       protocol: TCP
       targetPort: http
+      nodePort: null
     - name: https
       port: 443
       protocol: TCP
       targetPort: https
+      nodePort: null
   selector:
     app.kubernetes.io/name: wordpress
     app.kubernetes.io/instance: RELEASE-NAME
@@ -232,7 +233,7 @@ spec:
                   name: RELEASE-NAME-mariadb
                   key: mariadb-password
             - name: WORDPRESS_USERNAME
-              value: "user"
+              value: "ivan"
             - name: WORDPRESS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -249,7 +250,7 @@ spec:
             - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
               value: "no"
             - name: WORDPRESS_BLOG_NAME
-              value: "User's Blog!"
+              value: "Mi SuperBlog"
             - name: WORDPRESS_SKIP_BOOTSTRAP
               value: "no"
             - name: WORDPRESS_TABLE_PREFIX

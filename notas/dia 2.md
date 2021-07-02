@@ -209,7 +209,9 @@ Operar el cluster   <<<< Kubernetes    <<<< Reglas que definan unos operadores (
 
 Instalar apps /servicios en el cluster <<<< ???
                                             Jenkins (otro programa AUTO) muy largo plazo
-                                            
+                       
+                     OJO !!!!!                     
+                    VVV
         Desarrolladores hacen las apps  >>> codigo >>> gitlab
                                                             Dockerfile >>       ESTOS SCRIPTS HAY QUE MONTARLOS?
                                                                                 quien los monta?

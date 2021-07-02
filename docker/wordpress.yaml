@@ -27,12 +27,3 @@ services:  # Servicios
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - /home/ubuntu/environment/datos/mysql:/var/lib/mysql
-
----
-
-
-
-
-
-
-
